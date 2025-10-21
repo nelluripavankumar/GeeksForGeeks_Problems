@@ -1,0 +1,38 @@
+POTD of October 21 2025
+Top K elements retrieving Medium 
+Problem Link 
+https://www.geeksforgeeks.org/problems/top-k-frequent-elements-in-array/1
+
+
+
+Java Solution
+
+class Solution {
+    // intution is made up of the accesing the best sorted answer so the heap is used in that situation 
+    // after the storing the frequency of the elements adding elements to the queue priorityQueue
+    //using the custom comparator
+    //it will sorted
+    public ArrayList<Integer> topKFreq(int[] arr, int k) {
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a,b) -> {
+            if(b[1] != a[1])
+                return Integer.compare(b[1],a[1]);
+            return Integer.compare(b[0],a[0]);
+        });
+
+        
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int num : arr)
+            map.put(num,map.getOrDefault(num,0)+1);
+
+        //accessing the map through the entryset function
+        for(Map.Entry<Integer,Integer> e : map.entrySet())
+            queue.add(new int[]{e.getKey(),e.getValue()});
+        // now accesing the sorted top k elements through queue
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!queue.isEmpty() && k-- != 0){
+            ans.add(queue.peek()[0]);
+            queue.poll();
+        }
+        return ans;
+    }
+}
